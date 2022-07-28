@@ -15,7 +15,7 @@ python3 -m pip install --user ansible
 
 #### Clone the repo:
 ```shell
-git clone https://github.com/petrick-ribeiro/workstation.git
+git clone https://github.com/petrick-ribeiro/workstation.git &&\
 cd workstation
 ```
 #### Run the playbook:
