@@ -1,0 +1,22 @@
+---
+linux_pkgs:
+  - curl
+  - wget
+  - netcat
+  - mtr
+  - ncdu
+  - unzip
+  - apt-transport-https
+  - ca-certificates
+  - gnupg
+  - gnupg-agent
+  - lsb-release
+  - python3-pip
+  - make
+  - vim
+  - htop
+  - tree
+  - jq
+  - git
+  - virtualbox
+  - neofetch

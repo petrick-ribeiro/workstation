@@ -1,0 +1,8 @@
+---
+- name: Installing Linux Packages
+  become: true
+  apt:
+    name: '{{ linux_pkgs }}'
+    state: present
+    install_recommends: yes
+    update_cache: yes
