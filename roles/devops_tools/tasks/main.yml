@@ -1,9 +1,4 @@
 ---
-- name: Installing Ansible Core
-  pip:
-    name: ansible
-    executable: pip3
-
 - name: Installing Terraform 1.2.5
   become: true
   unarchive:
