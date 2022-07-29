@@ -5,10 +5,10 @@
     path: '{{ fish_config_file }}'
   register: fish_config
 
-- name: Setting Starship Shell 1.9.1
+- name: Setting Starship Prompt 1.9.1
   become: true
   block:
-    - name: Installing Starship Minimal Shell
+    - name: Installing Starship 
       unarchive:
         src: '{{ starship_src }}'
         dest: /usr/local/bin/
