@@ -12,6 +12,8 @@ linux_pkgs:
   - gnupg-agent
   - lsb-release
   - python3-pip
+  - python-apt
+  - python3-apt
   - make
   - vim
   - htop
