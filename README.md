@@ -18,8 +18,15 @@ python3 -m pip install --user ansible
 git clone https://github.com/petrick-ribeiro/workstation.git &&\
 cd workstation
 ```
+
 #### Run the playbook:
 ```shell
 ansible-playbook setup.yml
 ```
 > This playbook is geared towards improve DevOps workflow.
+
+#### Setup Starship prompt
+```shell
+ansible-playbook starship.yml
+```
+> Before run this playbook reload your shell session.

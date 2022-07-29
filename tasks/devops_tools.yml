@@ -1,5 +1,5 @@
 ---
-- name: Installing Terraform 1.2.5
+- name: Installing Terraform 1.2.6
   become: true
   unarchive:
     src: '{{ terraform_src }}'
@@ -52,7 +52,7 @@
         dest: '/usr/local/bin/docker-compose'
         mode: 755
 
-- name: Installing AWS CLI using pip
+- name: Installing AWS CLI using pip3
   become: true
   pip:
     name: awscli

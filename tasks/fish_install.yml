@@ -1,0 +1,17 @@
+---
+- name: Setting Fish Shell
+  become: true
+  block:
+    - name: Adding Fish repo
+      apt_repository:
+        repo: ppa:fish-shell/release-3
+
+    - name: Installing Fish Shell 3.x
+      apt:
+        name: fish
+        state: present
+
+    - name: Changing Default Shell to Fish
+      user:
+        name: '{{ ansible_user_id }}'
+        shell: /usr/bin/fish

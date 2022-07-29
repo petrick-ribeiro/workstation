@@ -3,7 +3,7 @@
   hosts: localhost
   connection: local
   gather_facts: true
-  roles:
-    - common_pkgs
-    - devops_tools
-    - terminal
+  tasks:
+    - import_tasks: ./tasks/common_pkgs.yml
+    - import_tasks: ./tasks/devops_tools.yml
+    - import_tasks: ./tasks/fish_install.yml

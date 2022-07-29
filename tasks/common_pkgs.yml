@@ -4,5 +4,5 @@
   apt:
     name: '{{ linux_pkgs }}'
     state: present
-    install_recommends: yes
     update_cache: yes
+    install_recommends: yes
