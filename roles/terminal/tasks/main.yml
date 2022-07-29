@@ -16,9 +16,6 @@
         name: '{{ ansible_user_id }}'
         shell: /usr/bin/fish
 
-    - name: Reset connection
-      meta: reset_connection
-
     - name: Ensure Fish config file are created
       become: true
       file:
