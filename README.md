@@ -21,12 +21,12 @@ cd workstation
 
 #### Run the playbook:
 ```shell
-ansible-playbook setup.yml
+ansible-playbook setup.yml --ask-become-pass
 ```
 > This playbook is geared towards improve DevOps workflow.
 
 #### Setup Starship prompt
 ```shell
-ansible-playbook starship.yml
+ansible-playbook starship.yml --ask-become-pass
 ```
 > Before run this playbook reload your shell session.
