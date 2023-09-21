@@ -1,0 +1,143 @@
+---
+- name: Setting up VSCode
+  become: true
+  block:
+    - name: Adding Microsoft repository key
+      get_url:
+        url: '{{ microsoft_key_url }}'
+        dest: '{{ microsoft_key_temp_dest }}'
+        # mode: 0644
+        # force: true
+
+    - name: Importing GPG Key
+      apt_key:
+        keyring: '{{ microsoft_key_dest }}'
+        file: '{{ microsoft_key_temp_dest }}'
+
+    - name: Installing Microsoft Repo
+      apt_repository:
+        repo: '{{ vscode_repo }}'
+        state: present
+        filename: vscode
+
+    - name: Installing VSCode
+      apt:
+        name: code
+        state: present
+        update_cache: true
+
+    - name: Installing VSCode extensions
+      become: false
+      command: code --install-extension '{{ item }}'
+      loop: '{{ vscode_extensions }}'
+
+- name: Setting up Go
+  become: true
+  block:
+    - name: Removing Go previous version
+      file:
+        path: '{{ local_path }}/go'
+        state: absent
+
+    - name: Downloading Go 1.21.0
+      unarchive:
+        src: '{{ go_src }}' 
+        dest: '{{ local_path }}'
+        remote_src: true
+
+    - name: Setting Go on $PATH
+      become: false
+      lineinfile:
+        path: '{{ item }}'
+        line: '{{ export_go_path }}'
+      loop:
+        - '{{ user_local_profile }}'
+        - '{{ user_local_bashrc }}'
+
+- name: Setting up Rust
+  become: false
+  block:
+    - name: Downloading rustup installation script
+      get_url:
+        url: '{{ rust_script_src }}'
+        dest: '{{ rust_script_file }}'
+
+    - name: Installing Rust via rustup
+      shell: '{{ rust_installation_command }}'
+
+    - name: Removing installation file
+      become: true
+      file:
+        path: '{{ rust_script_file }}'
+        state: absent
+
+    - name: Setting Rust on $PATH
+      lineinfile:
+        path: '{{ user_local_profile }}'
+        line: '{{ export_rust_path }}'
+
+- name: Setting up Java
+  become: true
+  block:
+    - name: Installing OpenJDK 17
+      apt:
+        name: '{{ openjdk17_pkg }}'
+        state: present
+        update_cache: yes
+        install_recommends: yes
+
+    - name: Setting JAVA_HOME on $PATH
+      become: false
+      lineinfile:
+        path: '{{ item }}'
+        line: '{{ export_java_home }}'
+      loop:
+        - '{{ user_local_profile }}'
+        - '{{ user_local_bashrc }}'
+
+    - name: Installing Maven 3.9.4
+      unarchive:
+        src: '{{ mvn_src }}'
+        dest: '{{ opt_path }}'
+        remote_src: yes
+
+    - name: Setting Maven on $PATH
+      become: false
+      lineinfile:
+        path: '{{ item }}'
+        line: '{{ export_mvn_path }}'
+      loop:
+        - '{{ user_local_profile }}'
+        - '{{ user_local_bashrc }}'
+
+- name: Setting up NodeJS
+  become: true
+  block:
+    - name: Downloading Nodesource GPG key
+      get_url:
+        url: '{{ nodejs_key_url }}'
+        dest: '{{ nodejs_key_temp_dest }}'
+
+    - name: Importing GPG Key
+      apt_key:
+        keyring: '{{ nodejs_key_dest }}'
+        file: '{{ nodejs_key_temp_dest }}'
+
+    - name: Installing NodeJS 18.x Repo
+      apt_repository:
+        repo: '{{ nodejs_repo }}'
+        state: present
+        filename: nodesource
+
+    - name: Updating package cache
+      apt:
+        update_cache: true
+
+    - name: Installing NodeJS
+      apt:
+        name: nodejs
+        state: present
+        update_cache: yes
+    
+    - name: Installing Yarn
+      command: npm install --global yarn

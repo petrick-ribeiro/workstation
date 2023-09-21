@@ -1,9 +1,0 @@
----
-- name: Provisioning Ubuntu Workstation
-  hosts: localhost
-  connection: local
-  gather_facts: true
-  tasks:
-    - import_tasks: ./tasks/common_pkgs.yml
-    - import_tasks: ./tasks/devops_tools.yml
-    - import_tasks: ./tasks/fish_install.yml

@@ -1,0 +1,148 @@
+---
+- name: Setting up Nerd Fonts
+  become: true
+  block:
+    - name: Downloading Nerd Fonts
+      unarchive:
+        src: '{{ item }}'
+        dest: '{{ font_dest }}'
+        remote_src: true
+      loop:
+        '{{ nerd_fonts_src }}'
+
+    - name: Updating fonts cache
+      command: '{{ update_font_cache_cmd }}'
+
+- name: Setting up .local dir
+  block:
+    - name: Checking if .local exists
+      stat:
+        path: '{{ user_local_path }}'
+      register: is_local_path
+
+    - name: Creating .local directories if does not exists
+      file:
+        path: '{{ item }}'
+        state: directory
+      loop: '{{ user_local_dirs }}'
+      when: is_local_path.stat.exists == false
+
+    - name: Setting .local on $PATH
+      become: false
+      lineinfile:
+        path: '{{ item }}'
+        line: '{{ export_local_path }}'
+      loop:
+        - '{{ user_local_profile }}'
+        - '{{ user_local_bashrc }}'
+      when: is_local_path.stat.exists
+
+- name: Setting up Kitty Terminal
+  block:
+    - name: Downloading Kitty installation script
+      get_url:
+        url: '{{ kitty_src }}'
+        dest: '{{ kitty_script_file }}'
+
+    - name: Installing Kitty
+      command: '{{ kitty_installation_command }}'
+
+    - name: Removing installation file
+      become: true
+      file:
+        path: '{{ kitty_script_file }}'
+        state: absent
+
+    - name: Creating Symbolic Kitty and Kitten link
+      file:
+        src: '{{ item.src }}'
+        dest: '{{ item.dest }}'
+        state: link
+      loop: '{{ kitty_symbolic_links }}'
+
+    - name: Placing the kitty.desktop files to user local directory
+      copy:
+        src: '{{ item.src }}'
+        dest: '{{ item.dest }}'
+        remote_src: true
+      loop: '{{ kitty_desktop_files }}'
+
+    - name: Updating the paths to the kitty and its icons in the kitty.desktop files
+      shell: '{{ item }}'
+      loop: '{{ kitty_icon_command }}'
+
+- name: Setting up Walk terminal navigator
+  become: true
+  block:
+    - name: Checking if Go is installed
+      stat:
+        path: '{{ local_path }}/usr/go/bin/go'
+      register: go_bin
+
+    - name: Installing Walk
+      command: '{{ walk_install }}'
+      when: go_bin.stat.exists
+
+- name: Setting up Neovim
+  become: true
+  block:
+    - name: Installing Neovim
+      unarchive:
+        src: '{{ nvim_src }}'
+        dest: '{{ nvim_dest }}'
+        remote_src: true
+        extra_opts:
+          - --transform
+          - '{{ nvim_folder_regex }}'
+
+    - name: Creating Neovim symlink
+      file:
+        src: '{{ nvim_dest }}/neovim/bin/nvim'
+        dest: '{{ bin_path }}/nvim'
+        state: link
+
+- name: Setting up AstroNvim
+  become: false
+  block:
+
+    - name: Cloning the repository
+      git:
+        repo: '{{ astronvim_repo }}'
+        dest: '{{ nvim_config_folder }}'
+        depth: 1
+
+- name: Setting up Fish Shell
+  become: true
+  block:
+    - name: Adding Fish repo
+      apt_repository:
+        repo: '{{ fish_repo }}'
+        filename: '{{ fish_key_dest }}'
+        state: present
+
+    - name: Installing Fish Shell 3.x
+      apt:
+        name: fish
+        state: present
+
+    - name: Changing Default Shell to Fish
+      user:
+        name: '{{ ansible_user_id }}'
+        shell: /usr/bin/fish
+
+- name: Setting Starship Prompt
+  become: true
+  block:
+    - name: Installing Starship
+      unarchive:
+        src: '{{ starship_src }}'
+        dest: '{{ bin_path }}'
+        remote_src: yes
+
+    - name: Setting Starship on $PATH
+      become: false
+      lineinfile:
+        path: '{{ item }}'
+        line: '{{ export_starship_path }}'
+      loop:
+        - '{{ user_local_bashrc }}'

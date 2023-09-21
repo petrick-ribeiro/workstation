@@ -1,0 +1,21 @@
+---
+terraform_src:
+  'https://releases.hashicorp.com/terraform/1.5.4/terraform_1.5.4_linux_amd64.zip'
+vagrant_src:
+  'https://releases.hashicorp.com/vagrant/2.3.7/vagrant_2.3.7_linux_amd64.zip'
+vault_src:
+  'https://releases.hashicorp.com/vault/1.14.1/vault_1.14.1_linux_amd64.zip'
+docker_key_url:
+  'https://download.docker.com/linux/ubuntu/gpg'
+docker_key_temp_dest:
+  '/tmp/docker.gpg'
+docker_key_dest:
+  '{{ trusted_dir_path }}/docker.gpg'
+docker_repo:
+  'deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
+docker_engine:
+  - docker-ce 
+  - docker-ce-cli 
+  - containerd.io 
+  - docker-buildx-plugin 
+  - docker-compose-plugin

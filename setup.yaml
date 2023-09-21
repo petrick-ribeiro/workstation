@@ -1,0 +1,16 @@
+---
+- name: Provisioning Workstation
+  hosts: localhost
+  connection: local
+  gather_facts: true
+  vars_files:
+    - vars/global_vars.yaml
+    - vars/common_vars.yaml
+    - vars/dev_vars.yaml
+    - vars/devops_vars.yaml
+    - vars/terminal_vars.yaml
+  tasks:
+    - import_tasks: ./tasks/common_pkgs.yaml
+    - import_tasks: ./tasks/dev_tools.yaml
+    - import_tasks: ./tasks/devops_tools.yaml
+    - import_tasks: ./tasks/terminal_tools.yaml

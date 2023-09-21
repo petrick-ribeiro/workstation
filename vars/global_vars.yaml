@@ -1,0 +1,14 @@
+---
+local_path: '/usr/local'
+bin_path: '/usr/local/bin'
+opt_path: '/opt'
+user_path: '/home/{{ ansible_user_id }}'
+user_local_path: '{{ user_path }}/.local'
+user_local_profile: '{{ user_path }}/.profile'
+user_local_bashrc: '{{ user_path }}/.bashrc'
+user_local_dirs:
+  - '{{ user_local_path }}'
+  - '{{ user_local_path }}/bin'
+  - '{{ user_local_path }}/share'
+  - '{{ user_local_path }}/share/applications'
+trusted_dir_path: '/etc/apt/trusted.gpg.d' 

@@ -1,0 +1,50 @@
+---
+export_local_path:
+  'export PATH=$PATH:$HOME/.local/bin'
+nerd_fonts_src:
+  - 'https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz'
+  - 'https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.tar.xz'
+  - 'https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraMono.tar.xz'
+font_dest:
+  '/usr/local/share/fonts'
+update_font_cache_cmd:
+  'fc-cache -fv'
+kitty_src:
+  'https://sw.kovidgoyal.net/kitty/installer.sh'
+kitty_script_file:
+  '/tmp/kitty.sh'
+kitty_installation_command:
+  'sh {{ kitty_script_file }} launch=n'
+kitty_symbolic_links:
+  - { src: '/home/{{ ansible_user_id }}/.local/kitty.app/bin/kitty', dest: '/home/{{ ansible_user_id }}/.local/bin/kitty' }
+  - { src: '/home/{{ ansible_user_id }}/.local/kitty.app/bin/kitten', dest: '/home/{{ ansible_user_id }}/.local/bin/kitten' }
+kitty_desktop_files:
+  - { src: '{{ user_local_path }}/kitty.app/share/applications/kitty.desktop', dest: '{{ user_local_path }}/share/applications/kitty.desktop' }
+  - { src: '{{ user_local_path }}/kitty.app/share/applications/kitty-open.desktop', dest: '{{ user_local_path }}/share/applications/kitty-open.desktop' }
+kitty_icon_command:
+  - 'sed -i "s|Icon=kitty|Icon=/home/{{ ansible_user_id }}/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" /home/{{ ansible_user_id }}/.local/share/applications/kitty*.desktop'
+  - 'sed -i "s|Exec=kitty|Exec=/home/{{ ansible_user_id }}/.local/kitty.app/bin/kitty|g" /home/{{ ansible_user_id }}/.local/share/applications/kitty*.desktop'
+nvim_src:
+  'https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz'
+nvim_dest:
+  '{{ opt_path }}'
+nvim_folder_regex:
+  's!^[^/]\+\($\|/\)!neovim\1!'
+nvim_config_folder:
+  '{{ user_path }}/.config/nvim'
+astronvim_repo:
+  'https://github.com/AstroNvim/AstroNvim.git'
+fish_repo:
+  'ppa:fish-shell/release-3'
+fish_key_dest:
+  '/etc/apt/keyrings'
+fish_config_file: 
+  '{{ user_path }}/.config/fish/config.fish'
+starship_src:
+  'https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-musl.tar.gz'
+starship_config_file:
+  '{{ user_path }}/.config/starship.toml'
+export_starship_path:
+  'eval "$(starship init bash)"'
+walk_install:
+  '/usr/local/go/bin/go install github.com/antonmedv/walk@latest'
