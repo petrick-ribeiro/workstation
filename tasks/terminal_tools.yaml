@@ -76,7 +76,7 @@
   block:
     - name: Checking if Go is installed
       stat:
-        path: '{{ local_path }}/usr/go/bin/go'
+        path: '{{ local_path }}/go/bin/go'
       register: go_bin
 
     - name: Installing Walk
