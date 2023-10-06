@@ -48,3 +48,5 @@ export_starship_path:
   'eval "$(starship init bash)"'
 walk_install:
   '/usr/local/go/bin/go install github.com/antonmedv/walk@latest'
+lazygit_install:
+  '/usr/local/go/bin/go install github.com/jesseduffield/lazygit@latest'

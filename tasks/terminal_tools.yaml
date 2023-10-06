@@ -71,16 +71,24 @@
       shell: '{{ item }}'
       loop: '{{ kitty_icon_command }}'
 
-- name: Setting up Walk terminal navigator
+- name: Checking if Go is installed
   become: true
-  block:
-    - name: Checking if Go is installed
-      stat:
-        path: '{{ local_path }}/go/bin/go'
-      register: go_bin
+  stat:
+    path: '{{ local_path }}/go/bin/go'
+  register: go_bin
 
+- name: Setting up Walk terminal navigator
+  become: false
+  block:
     - name: Installing Walk
       command: '{{ walk_install }}'
+      when: go_bin.stat.exists
+
+- name: Setting up Lazygit
+  become: false
+  block:
+    - name: Installing Lazygit
+      command: '{{ lazygit_install }}'
       when: go_bin.stat.exists
 
 - name: Setting up Neovim
