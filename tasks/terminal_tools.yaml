@@ -91,6 +91,18 @@
       command: '{{ lazygit_install }}'
       when: go_bin.stat.exists
 
+- name: Setting up browser-sync
+  become: true
+  block:
+    - name: Checking if NPM is installed
+      stat:
+        path: '/usr/bin/npm'
+      register: npm_bin
+
+    - name: Installing browser-sync
+      command: '{{ browsersync_install }}'
+      when: npm_bin.stat.exists
+
 - name: Setting up Neovim
   become: true
   block:

@@ -14,6 +14,7 @@ linux_pkgs:
   - lsb-release
   - python3-pip
   - python3-apt
+  - python3-venv
   - make
   - vim
   - htop
@@ -22,3 +23,4 @@ linux_pkgs:
   - git
   - virtualbox
   - neofetch
+  - luarocks

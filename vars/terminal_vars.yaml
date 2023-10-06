@@ -50,3 +50,5 @@ walk_install:
   '/usr/local/go/bin/go install github.com/antonmedv/walk@latest'
 lazygit_install:
   '/usr/local/go/bin/go install github.com/jesseduffield/lazygit@latest'
+browsersync_install:
+  'npm install -g browser-sync'
